@@ -3,6 +3,8 @@
 
 [Python Robotics](https://github.com/AtsushiSakai/PythonRobotics)のEKF SLAMのコードを参考にしています．
 
+また，実装したアルゴリズムの解説はekf_slam.pdfに記載しています．
+
 # Requirement
 cmake
 

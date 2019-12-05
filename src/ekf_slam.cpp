@@ -11,17 +11,19 @@
 #define deg_to_rad(deg) (deg*M_PI) / 180.
 #define rad_to_deg(rad) (rad*180) / M_PI
 
-double dt = 0.1;
-double SIM_TIME = 50.0;
-double MAX_RANGE = 15.0;
-double W_MIN = 0.01;
-double M_DIST_TH = 2.0;
-const int STATE_SIZE = 3;
-const int LM_SIZE = 2;
+double dt = 0.1; // time tick [s]
+double SIM_TIME = 50.0; // simulation time [s]
+double MAX_RANGE = 15.0; // maximum observation range [m]
+double W_MIN = 0.01; // minimum angular velocity [rad/s]
+double M_DIST_TH = 2.0; // Threshold of Mahalanobis distance for data association
+const int STATE_SIZE = 3; // State size [x,y,theta]
+const int LM_SIZE = 2; // LM srate size [x,y]
 
+// Simulation parameter
 std::vector<double> Qsim = {pow(0.2, 2), pow(deg_to_rad(1.0), 2)};
 std::vector<double> Rsim = {pow(1.0, 2), pow(deg_to_rad(10.0), 2)};
 
+// EKF state covariance
 Eigen::Vector3d cx_diag(pow(0.5, 2), pow(0.5, 2), pow(deg_to_rad(30.0), 2));
 Eigen::Matrix<double, 3, 3> Cx = cx_diag.asDiagonal();
 
@@ -267,7 +269,7 @@ std::tuple< Eigen::MatrixXd, Eigen::MatrixXd > ekf_slam(Eigen::MatrixXd xEst, Ei
     initP = Eigen::MatrixXd::Identity(2, 2);
 
     // Update
-    for(int iz=0; iz < z.size(); iz++)
+    for(int iz=0; iz < z.size(); iz++) // for each observation
     {
         int minid = search_correspond_LM_ID(xEst, PEst, z[iz].block(0, 0, 2, 1));
         int nLM = calc_n_LM(xEst);
